@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Silex v3.6.4">
+<link rel="stylesheet" href="/css/docs-0f9cb30cb075bc2047400b7eeef934f85eb1ee63c8f6f5012f7159ab4cb36b25.css" />
+<style>a:link{color:inherit;}</style>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a'); 
+
+  // 1. MAP (On garde ça, c'est très bien)
+  const linksMap = new Map();
+  navLinks.forEach(link => {
+    if (link.hash) { 
+      const id = link.hash.substring(1);
+      if (document.getElementById(id)) linksMap.set(id, link);
+    }
+  });
+
+  let isManualScrolling = false;
+  let scrollTimeout;
+
+  // 2. FONCTION D'ACTIVATION (LA CORRECTION EST ICI)
+  function activateId(id) {
+    const targetLink = linksMap.get(id);
+    if (!targetLink) return;
+
+    // NETTOYAGE TOTAL : On enlève la classe 'active' de PARTOUT
+    // Cela garantit qu'il est impossible d'en avoir deux en même temps
+    navLinks.forEach(link => link.classList.remove('active'));
+
+    // On active seulement le bon
+    targetLink.classList.add('active');
+  }
+
+  // 3. OBSERVER STRICT
+  // On réduit la zone de détection à une ligne fine en haut de l'écran (10% de hauteur)
+  // Comme ça, une seule section peut être "active" à la fois physiquement.
+  const observerOptions = {
+    root: null,
+    rootMargin: '-10% 0px -80% 0px', 
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    if (isManualScrolling) return;
+
+    // S'il y a plusieurs sections détectées (ex: Requirements et Configuration),
+    // on prend uniquement celle qui est la plus haute dans la page.
+    const visibleEntries = entries.filter(e => e.isIntersecting);
+    
+    if (visibleEntries.length > 0) {
+      // On trie par position verticale (top) pour être sûr de prendre la première
+      visibleEntries.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      activateId(visibleEntries[0].target.id);
+    }
+  }, observerOptions);
+
+  sections.forEach(section => observer.observe(section));
+
+  // 4. GESTION DU CLIC (Inchangé mais fiable)
+  navLinks.forEach(link => {
+    if (!link.hash) return;
+    link.addEventListener('click', (e) => {
+      if (link.pathname !== window.location.pathname && link.pathname !== '') return;
+      e.preventDefault();
+      const targetId = link.hash.substring(1);
+      const targetSection = document.getElementById(targetId);
+
+      if (targetSection) {
+        activateId(targetId); // Active visuellement tout de suite
+        isManualScrolling = true;
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+        
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => { isManualScrolling = false; }, 800);
+      }
+    });
+  });
+  
+  // Activation initiale au chargement
+  const currentHash = window.location.hash.substring(1);
+  if (currentHash && document.getElementById(currentHash)) {
+      activateId(currentHash);
+  } else if (sections.length > 0 && window.scrollY < 100) {
+      activateId(sections[0].id);
+  }
+});
+</script>
+
+
+
+</head>
+<body id="page-doc" class="page-doc"><header id="iz5ca-3" class="oss-nav current-doc"><div id="itdvq-3" class="oss-container"><a href="index.html" id="i358f-3" class="oss-nav__logo"><span id="ifiko-3">⚡</span> OpenForge
+        </a><input type="checkbox"  id="nav-toggle" class="navbar__checkbox"></input><nav id="ibe1w-3" class="navbar__menu"><a href="docs.html" id="iig8u-3" class="oss-nav__link current-doc">Docs</a><a href="community.html" id="igsfy-3" class="oss-nav__link current-com">Community</a><a href="https://github.com/" id="ixjys-3" target="_blank" class="oss-nav__link">GitHub</a><a href="docs.html#getting-started" id="i0vse-3" class="oss-btn oss-btn--primary oss-btn--sm">Get started</a></nav><label for="nav-toggle" id="ixcwdug-2-3" class="navbar__toggle">☰</label></div></header><!-- Docs Hero --><MAIN id="iaepkck"><section id="itfojm" class="oss-hero oss-hero__doc"><div id="idh7gk" class="oss-container"><h1 id="iiv6fj" class="oss-h1">Documentation</h1><p id="ikpzyn" class="oss-body-lg">Everything you need to get started with OpenForge CLI.</p></div></section><section id="iosval" class="oss-section"><div id="ifok8d" class="oss-container"><div id="izs5ko" class="oss-docs"><!-- Sidebar TOC --><aside id="i7qprg"><nav id="iws4mj" class="oss-toc"><p id="inihv4" class="oss-toc__title">On this page</p><ul id="itfbb9" class="oss-toc__list"><li id="i4vsvx" class="oss-toc__item"><a href="#getting-started" id="igk2er" class="oss-toc__link">Getting Started</a></li><li id="i1y4wh" class="oss-toc__item"><a href="#installation" id="iv924f" class="oss-toc__link">Installation</a></li><li id="ikkjil" class="oss-toc__item"><a href="#requirements" id="i3y4mh" class="oss-toc__link">Requirements</a></li><li id="i3jf8g" class="oss-toc__item"><a href="#configuration" id="iq0dbt" class="oss-toc__link">Configuration</a></li><li id="iq3pzo" class="oss-toc__item"><a href="#usage" id="i6e2pu" class="oss-toc__link">Usage Examples</a></li><li id="ido4mh" class="oss-toc__item"><a href="#advanced" id="i43qau" class="oss-toc__link">Advanced Setup</a></li><li id="ite1e9" class="oss-toc__item"><a href="#upgrade" id="iig2ry" class="oss-toc__link">Upgrade Notes</a></li><li id="ived7s" class="oss-toc__item"><a href="#faq" id="i23bfk" class="oss-toc__link">FAQ</a></li></ul></nav></aside><!-- Main Content --><div id="irsyvl" class="oss-docs__content"><section id="getting-started"><h2 id="igviha" class="oss-h2">Getting Started</h2><p id="it8pgw">OpenForge CLI is a modern build tool designed for speed and simplicity. This guide will help you get up and running in minutes.</p><div id="i97rwk" class="oss-alert oss-alert--info"><div id="ildfm3" class="oss-alert__title">Quick Start</div><p id="iuhgqk" class="oss-alert__text">For the impatient: <code id="ien47f">npm install -g openforge &amp;&amp; openforge init</code></p></div></section><section id="installation"><h2 id="idf5cy" class="oss-h2">Installation</h2><p id="i0lphr">Install OpenForge globally using your preferred package manager:</p><h3 id="ikq7dt" class="oss-h4">npm</h3><pre id="ihj9ki"><code id="imxuvj">npm install -g openforge</code></pre><h3 id="id1iyu" class="oss-h4">yarn</h3><pre id="imx22c"><code id="iigoyd">yarn global add openforge</code></pre><h3 id="i9jjt7" class="oss-h4">pnpm</h3><pre id="idv4ub"><code id="iedtmg">pnpm add -g openforge</code></pre><h3 id="i5397j" class="oss-h4">Homebrew (macOS)</h3><pre id="i78lzv"><code id="in69mu">brew install openforge</code></pre><p id="inj6gg">Verify the installation:</p><pre id="ivux2j"><code id="izc4mg">openforge --version
+# Output: openforge v2.4.0</code></pre></section><section id="requirements"><h2 id="iphjfu" class="oss-h2">Requirements</h2><ul id="ivrzaa"><li id="ixvom4"><strong id="iw1bi4">Node.js:</strong> v18.0.0 or higher</li><li id="imawxl"><strong id="i9k7w2">Operating System:</strong> macOS, Linux, or Windows 10+</li><li id="inthw7"><strong id="ir9qyn">Memory:</strong> 512MB RAM minimum (2GB recommended)</li><li id="i41zv1"><strong id="izt1sj">Disk Space:</strong> 100MB for installation</li></ul></section><section id="configuration"><h2 id="iqnabd" class="oss-h2">Configuration</h2><p id="il9a3f">Create an <code id="icrjlg">openforge.config.js</code> file in your project root:</p><pre id="iq63h2"><code id="igqgmg">// openforge.config.js
+export default {
+  entry: './src/index.js',
+  output: {
+    path: './dist',
+    filename: 'bundle.js'
+  },
+  plugins: [],
+  optimization: {
+    minify: true,
+    treeshake: true
+  }
+}</code></pre><h3 id="i8ho29" class="oss-h4">Configuration Options</h3><table id="i9ycgq" class="oss-table"><thead id="ijq87i"><tr id="iyocm1"><th id="i08etf">Option</th><th id="i3rubi">Type</th><th id="irqvp4">Default</th><th id="ivx8kh">Description</th></tr></thead><tbody id="i2trrl"><tr id="ixe5wl"><td id="ic6b1f"><code id="i4tuwi">entry</code></td><td id="ie9i8t">string</td><td id="ib76pj">'./src/index.js'</td><td id="i9uwbs">Entry point for the build</td></tr><tr id="i03htk"><td id="iol6uh"><code id="i2nhhe">output.path</code></td><td id="i63e0o">string</td><td id="ip7i6t">'./dist'</td><td id="ifnq91">Output directory</td></tr><tr id="i8i3mx"><td id="i3hckl"><code id="iaz8nk">plugins</code></td><td id="i2op4j">array</td><td id="ij0a0a">[]</td><td id="iiyi5z">List of plugins to use</td></tr></tbody></table></section><section id="usage"><h2 id="izflql" class="oss-h2">Usage Examples</h2><h3 id="iil1hq" class="oss-h4">Initialize a new project</h3><pre id="iunout"><code id="ifihtv">openforge init my-project
+cd my-project
+openforge dev</code></pre><h3 id="ii51fj" class="oss-h4">Development server</h3><pre id="i3a8oq"><code id="iq67vx">openforge dev
+# Server running at http://localhost:3000</code></pre><h3 id="is5hu8" class="oss-h4">Production build</h3><pre id="ikevg7"><code id="is7uau">openforge build
+# Output: dist/bundle.js (45kb gzipped)</code></pre><h3 id="il789b" class="oss-h4">Run with custom config</h3><pre id="i1dvjf"><code id="imukrb">openforge build --config custom.config.js</code></pre></section><section id="advanced"><h2 id="iq9u7n" class="oss-h2">Advanced Setup</h2><h3 id="itwjhg" class="oss-h4">Using Plugins</h3><pre id="isvt0v"><code id="ikgcl9">import react from '@openforge/plugin-react';
+import css from '@openforge/plugin-css';
+
+export default {
+  plugins: [
+    react(),
+    css({ modules: true })
+  ]
+}</code></pre><h3 id="ivqtk3" class="oss-h4">Environment Variables</h3><p id="ixz8oa">OpenForge automatically loads <code id="ikxsww">.env</code> files:</p><pre id="ioe0mg"><code id="iqd1p4"># .env
+API_URL=https://api.example.com
+DEBUG=true</code></pre><p id="imb96l">Access in your code:</p><pre id="icam1h"><code id="i3k9vy">const apiUrl = process.env.API_URL;</code></pre><h3 id="ix2xf4" class="oss-h4">Monorepo Support</h3><pre id="iee1x2"><code id="i8o6bh">// openforge.config.js
+export default {
+  workspaces: ['packages/*'],
+  hoisting: true
+}</code></pre></section><section id="upgrade"><h2 id="i20vrz" class="oss-h2">Upgrade Notes</h2><div id="immb35" class="oss-alert oss-alert--warning"><div id="i4q79j" class="oss-alert__title">Upgrading from v1.x</div><p id="ine9ol" class="oss-alert__text">v2.0 includes breaking changes. See the migration guide for details.</p></div><h3 id="iwgo3o" class="oss-h4">v2.4.0 (Current)</h3><ul id="i4tmx8"><li id="idxsbi">Added workspace support for monorepos</li><li id="ixmt97">Improved plugin API</li><li id="io4xmn">Fixed memory leak in watch mode</li></ul><h3 id="ibh5jg" class="oss-h4">v2.3.0</h3><ul id="i2edhv"><li id="in4nxw">Added CSS modules support</li><li id="ifnv5d">Performance improvements</li></ul></section><section id="faq"><h2 id="ievgkj" class="oss-h2">FAQ</h2><h3 id="i1fvzk" class="oss-h4">How do I report a bug?</h3><p id="icy7uh">Open an issue on <a href="https://github.com/openforge/cli/issues" id="ih1r6w">GitHub Issues</a> with reproduction steps.</p><h3 id="igw9el" class="oss-h4">Is OpenForge production-ready?</h3><p id="ipwxgp">Yes! OpenForge is used by thousands of projects in production, including several Fortune 500 companies.</p><h3 id="iy1yvl" class="oss-h4">How do I contribute?</h3><p id="i6del3">Check our <a href="community.html" id="ielv3h">Community page</a> for contribution guidelines.</p></section><!-- Full docs link --><div id="iz0xx8"><h3 id="i52c1r" class="oss-h4">Need more?</h3><p id="infgzx" class="oss-body">Check out the full API reference on GitHub.</p><a href="https://github.com/openforge/cli/wiki" id="ifir2s" class="oss-btn oss-btn--secondary">Full Documentation</a></div></div></div></div></section></MAIN><!-- Docs Content --><!-- Footer --><footer id="iwqaij-3" class="oss-footer"><div id="ivsi6j-3" class="oss-container"><div id="itdzj2-3" class="oss-footer__grid"><div id="i4qnej-3"><h4 id="ic7qma-3" class="oss-footer__title"><span id="ip2wsa-3">⚡</span> OpenForge
+            </h4><p id="i4htfe-3" class="oss-footer__text">A modern CLI toolkit for developers. Built with ❤️ by the open source community.</p></div><div id="iglzu6-3"><h4 id="ifr7t7-3" class="oss-footer__title">Resources</h4><a href="docs.html" id="iq20z7-3" class="oss-footer__link">Documentation</a><a href="docs.html#getting-started" id="iivldb-3" class="oss-footer__link">Getting Started</a><a href="docs.html#api" id="i6w7d2-3" class="oss-footer__link">API Reference</a><a href="#" id="i0l6ic-3" class="oss-footer__link">Changelog</a></div><div id="imy4tt-3"><h4 id="ihavqb-3" class="oss-footer__title">Community</h4><a href="https://github.com/openforge/cli" id="inl6ei-3" class="oss-footer__link">GitHub</a><a href="#" id="ifgv5j-3" class="oss-footer__link">Discord</a><a href="#" id="i3j91m-3" class="oss-footer__link">Twitter</a><a href="community.html" id="ic56rl-3" class="oss-footer__link">Contributing</a></div><div id="ikbpha-3"><h4 id="i2rd1k-3" class="oss-footer__title">Legal</h4><a href="#" id="im5gth-3" class="oss-footer__link">MIT License</a><a href="#" id="ipcokj-3" class="oss-footer__link">Security Policy</a><a href="#" id="iw3jgj-3" class="oss-footer__link">Code of Conduct</a></div></div><div draggable="true" id="i58k9g-2-3" class="oss-footer__bottom"><p draggable="true" id="iha89s000-2-3">© 2026 DevDocs. Built with <a draggable="true" href="https://www.silex.me/" id="ij9a3s-3-2-3">Silex</a></p><p draggable="true" id="iha89s-2-3-2-7-3-2-3">Licensed under</p><a draggable="true" href="https://creativecommons.org/licenses/by/4.0/" id="izfjej-4-2-3-2-3" rel="noopener" target="_blank">CC BY 4.0</a><svg draggable="true" id="i1k7yk-3-2-7-7-2-3" viewBox="0 0 496 512" xmlns="http://www.w3.org/2000/svg" class="cc-icon"><path d="M314.9 194.4v101.4h-28.3v120.5h-56.1V295.9h-28.4V194.4c0-21.6 12.7-39.6 30.6-47.2 4-12.4 15.4-21.2 28.9-21.2 13.4 0 24.7 8.8 28.8 21.2 17.8 7.6 30.5 25.5 30.5 47.2zm-63.5-73.4c14.4 0 26-11.6 26-26s-11.6-26-26-26-26 11.6-26 26 11.6 26 26 26zM247.4 8C110.8 8 0 118.8 0 256s110.8 248 247.4 248c136.6 0 247.4-110.8 247.4-248S384 8 247.4 8zm.8 451.9c-112.5 0-203.7-91.2-203.7-203.7S135.7 52.4 248.2 52.4s203.8 91.2 203.8 203.7-91.3 203.8-203.8 203.8z" draggable="true" fill="currentColor" id="ii0h6q-3-2-7-7-2-3"></path></svg><svg draggable="true" id="inlr83-3-2-7-7-2-3" viewBox="0 0 496 512" xmlns="http://www.w3.org/2000/svg" class="cc-icon"><path d="M245.83 214.87l-33.22 17.28c-9.43-19.58-25.24-19.93-27.46-19.93-22.13 0-33.22 14.61-33.22 43.89 0 28.67 11.09 43.35 33.22 43.35 22.13 0 35.51-14.61 35.51-34.93h31.9c0 30.23-25.5 58.01-64.86 58.01-44.5 0-66.21-25.13-66.21-66.43 0-41.02 21.71-66.97 66.21-66.97 31.62 0 60.16 19.33 60.16 45.73zm114.2 0l-33.22 17.28c-9.43-19.58-25.24-19.93-27.46-19.93-22.13 0-33.22 14.61-33.22 43.89 0 28.67 11.09 43.35 33.22 43.35 22.13 0 35.51-14.61 35.51-34.93h31.9c0 30.23-25.5 58.01-64.86 58.01-44.5 0-66.21-25.13-66.21-66.43 0-41.02 21.71-66.97 66.21-66.97 31.62 0 60.16 19.33 60.16 45.73zM247.42 8C110.77 8 0 118.78 0 256s110.77 248 247.42 248C384.06 504 494.83 393.22 494.83 256 494.83 118.78 384.06 8 247.42 8zm.84 451.91c-112.53 0-203.74-91.21-203.74-203.74S135.73 52.43 248.26 52.43s203.74 91.21 203.74 203.74-91.21 203.74-203.74 203.74z" draggable="true" fill="currentColor" id="ipuqgu-3-2-7-7-2-3"></path></svg></div></div></footer></body>
+</html>
